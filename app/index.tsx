@@ -5,7 +5,8 @@ import ThemedView from "@/components/themecontex/ThemedView";
 import ThemeInput from "@/components/themecontex/ThemeInput";
 import UseLogin from "@/services/UseLogin";
 import { useState } from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, Pressable } from "react-native";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import "../global.css";
 
 
@@ -61,6 +62,8 @@ export default function Login() {
                     placeholder="CP12345678910"
                     value={username}
                     onChangeText={setUsername}
+                    className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+
                 >
                 </ThemeInput>
 
@@ -69,7 +72,7 @@ export default function Login() {
                 </Text>
                 <ThemeInput
                     placeholder="*****"
-                    className="mt-1"
+                    className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry

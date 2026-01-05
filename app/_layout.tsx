@@ -35,6 +35,8 @@ export default function RootLayout() {
             }}
           />
         </Stack>
+        
+
         <StatusBar
           style={currentTheme === 'dark' ? 'light' : 'dark'}
           backgroundColor={currentTheme === 'dark' ? '#000000' : '#ffffff'}
