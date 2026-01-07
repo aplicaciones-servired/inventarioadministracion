@@ -48,7 +48,7 @@ export default function ModalMaquina({
                         <View className="mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
                             <View className="flex-row items-center justify-between mb-1">
                                 <View className="flex-row items-center gap-2">
-                                    <ThemedText className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                    <ThemedText className="text-xs uppercase tracking-wide text-gray-500 dark:text-white">
                                         Máquina Dispensadora - Detalle Completo
                                     </ThemedText>
                                 </View>
@@ -76,7 +76,7 @@ export default function ModalMaquina({
                         <View className="mb-4">
                             <View className="flex-row items-center gap-2 mb-3">
                                 <Ionicons name="cart" size={16} color="#16a34a" />
-                                <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                                <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-white">
                                     Ventas
                                 </ThemedText>
                             </View>
@@ -113,7 +113,7 @@ export default function ModalMaquina({
                         <View className="mb-4">
                             <View className="flex-row items-center gap-2 mb-3">
                                 <Ionicons name="ticket" size={16} color="#9333ea" />
-                                <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                                <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-white">
                                     Inventario Raspas
                                 </ThemedText>
                             </View>
@@ -149,24 +149,24 @@ export default function ModalMaquina({
                         <View className="mb-4">
                             <View className="flex-row items-center gap-2 mb-3">
                                 <Ionicons name="bar-chart" size={16} color="#0891b2" />
-                                <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                                <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-white">
                                     Información del Contador
                                 </ThemedText>
                             </View>
                             <View className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                                 <View className="flex-row justify-between mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-                                    <ThemedText className="text-sm text-gray-600 dark:text-gray-400">
+                                    <ThemedText className="text-sm text-gray-600 dark:text-white">
                                         Último Contado
                                     </ThemedText>
-                                    <ThemedText className="text-lg font-bold">
+                                    <ThemedText className="text-lg font-bold dark:text-white">
                                         {ultimo_contados.toLocaleString()}
                                     </ThemedText>
                                 </View>
                                 <View className="flex-row justify-between">
-                                    <ThemedText className="text-sm text-gray-600 dark:text-gray-400">
+                                    <ThemedText className="text-sm text-gray-600 dark:text-white">
                                         Contador Fecha
                                     </ThemedText>
-                                    <ThemedText className="text-lg font-bold">
+                                    <ThemedText className="text-lg font-bold dark:text-white">
                                         {calor_contador_fecha.toLocaleString()}
                                     </ThemedText>
                                 </View>
@@ -177,7 +177,7 @@ export default function ModalMaquina({
                         <View className="mb-4">
                             <View className="flex-row items-center gap-2 mb-3">
                                 <Ionicons name="basket" size={16} color="#dc2626" />
-                                <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                                <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-white">
                                     Compras
                                 </ThemedText>
                             </View>
@@ -196,7 +196,7 @@ export default function ModalMaquina({
                             <View className="mb-4">
                                 <View className="flex-row items-center gap-2 mb-3">
                                     <Ionicons name="document-text" size={16} color="#d97706" />
-                                    <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                                    <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-white">
                                         Observaciones
                                     </ThemedText>
                                 </View>

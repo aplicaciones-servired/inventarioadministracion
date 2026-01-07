@@ -51,7 +51,7 @@ export default function CardMaquina({
           {/* Header */}
           <View className="flex-row items-center justify-between mb-3">
             <View className="flex-1">
-              <ThemedText className="font-bold text-xl uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1">
+              <ThemedText className="font-bold text-xl uppercase tracking-wide text-gray-500 dark:text-white mb-1">
                 Máquina Dispensadora
               </ThemedText>
               <ThemedText type="defaultSemiBold" className="text-cyan-600 dark:text-cyan-400">
@@ -96,10 +96,10 @@ export default function CardMaquina({
           {/* Contador */}
           <View className="bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg ">
             <View className="flex-row justify-between items-center">
-              <ThemedText className="text-xs text-gray-600 dark:text-gray-400">
+              <ThemedText className="text-xs text-gray-600 dark:text-white">
                 Contador Fecha
               </ThemedText>
-              <ThemedText className="text-sm font-bold">
+              <ThemedText className="text-sm font-bold dark:text-white">
                 {calor_contador_fecha.toLocaleString()}
               </ThemedText>
             </View>

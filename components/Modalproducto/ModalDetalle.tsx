@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Modal, Pressable, ScrollView } from "react-native";
+import { View, Text, Modal, Pressable, ScrollView, Image } from "react-native";
 import ThemeInput from "../themecontex/ThemeInput";
 import { ThemedText } from "../themecontex/themed-text";
 import { Button } from "../nativewindui/Button";
@@ -8,9 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 interface ModalInvenProps {
     isOpen: boolean;
     onClose: () => void;
+    title: string;
+    stock: number;
+    price: string;
+    image: any;
 }
 
-const ModalDetalle = ({ isOpen, onClose }: ModalInvenProps) => {
+const ModalDetalle = ({ isOpen, onClose, title, stock, price, image }: ModalInvenProps) => {
     return (
         <Modal
             visible={isOpen}
@@ -37,6 +41,17 @@ const ModalDetalle = ({ isOpen, onClose }: ModalInvenProps) => {
                             </Pressable>
                         </View>
 
+                        {/* Imagen del Producto */}
+                        <View className="mb-4 items-center">
+                            <View className="w-40 h-40 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl items-center justify-center border-4 border-cyan-200 dark:border-cyan-800 shadow-lg">
+                                <Image
+                                    source={image}
+                                    className="w-32 h-32"
+                                    resizeMode="contain"
+                                />
+                            </View>
+                        </View>
+
                         {/* Product Name */}
                         <View className="mb-4">
                             <View className="flex-row items-center gap-2 mb-2">
@@ -47,24 +62,27 @@ const ModalDetalle = ({ isOpen, onClose }: ModalInvenProps) => {
                             </View>
                             <View className="bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3">
                                 <ThemedText className="text-gray-900 dark:text-gray-100">
-                                    Coca Cola 500ml
+                                    {title}
                                 </ThemedText>
                             </View>
                         </View>
 
                         {/* Stock y Price en Grid */}
-                        <View className="flex-row gap-3 mb-4">
+                        <View className="flex-row gap-3 mb-6">
                             {/* Stock */}
                             <View className="flex-1">
                                 <View className="flex-row items-center gap-2 mb-2">
                                     <Ionicons name="cube" size={18} color="#16a34a" />
                                     <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                        Stock
+                                        Stock Disponible
                                     </ThemedText>
                                 </View>
-                                <View className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
-                                    <ThemedText className="text-green-700 dark:text-green-300 text-lg font-bold">
-                                        25
+                                <View className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 items-center">
+                                    <ThemedText className="text-green-700 dark:text-green-300 text-2xl font-bold">
+                                        {stock}
+                                    </ThemedText>
+                                    <ThemedText className="text-green-600 dark:text-green-400 text-xs mt-1">
+                                        unidades
                                     </ThemedText>
                                 </View>
                             </View>
@@ -74,29 +92,14 @@ const ModalDetalle = ({ isOpen, onClose }: ModalInvenProps) => {
                                 <View className="flex-row items-center gap-2 mb-2">
                                     <Ionicons name="cash" size={18} color="#d97706" />
                                     <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                        Precio
+                                        Precio de Venta
                                     </ThemedText>
                                 </View>
-                                <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
-                                    <ThemedText className="text-amber-700 dark:text-amber-300 text-lg font-bold">
-                                        $2.50
+                                <View className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 items-center">
+                                    <ThemedText className="text-amber-700 dark:text-amber-300 text-2xl font-bold">
+                                        {price}
                                     </ThemedText>
                                 </View>
-                            </View>
-                        </View>
-
-                        {/* Image URL */}
-                        <View className="mb-6">
-                            <View className="flex-row items-center gap-2 mb-2">
-                                <Ionicons name="image" size={18} color="#9333ea" />
-                                <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                    URL de Imagen
-                                </ThemedText>
-                            </View>
-                            <View className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-3">
-                                <ThemedText className="text-purple-700 dark:text-purple-300 text-xs" numberOfLines={1}>
-                                    https://ejemplo.com/imagen.jpg
-                                </ThemedText>
                             </View>
                         </View>
 

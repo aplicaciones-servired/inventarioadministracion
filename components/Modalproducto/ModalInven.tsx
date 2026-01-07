@@ -1,9 +1,10 @@
-import React from "react";
-import { View, Text, Modal, Pressable, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Modal, Pressable, ScrollView, Image, Alert } from "react-native";
 import { ThemedText } from "../themecontex/themed-text";
 import ThemeInput from "../themecontex/ThemeInput";
 import { Button } from "../nativewindui/Button";
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 
 interface ModalInvenProps {
@@ -12,6 +13,30 @@ interface ModalInvenProps {
 }
 
 const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+    const pickImage = async () => {
+        // Solicitar permisos
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        
+        if (status !== 'granted') {
+            Alert.alert('Permisos denegados', 'Necesitamos permisos para acceder a tus fotos');
+            return;
+        }
+
+        // Abrir selector de imágenes
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+        });
+
+        if (!result.canceled && result.assets[0]) {
+            setSelectedImage(result.assets[0].uri);
+        }
+    };
+
     return (
         <Modal
             visible={isOpen}
@@ -82,18 +107,42 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
                             />
                         </View>
 
-                        {/* Image URL */}
+                        {/* Selector de Imagen */}
                         <View className="mb-6">
                             <View className="flex-row items-center gap-2 mb-2">
                                 <Ionicons name="image" size={18} color="#9333ea" />
                                 <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                    URL de Imagen
+                                    Imagen del Producto
                                 </ThemedText>
                             </View>
-                            <ThemeInput
-                                placeholder="https://ejemplo.com/imagen.jpg"
-                                className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
-                            />
+                            
+                            <Pressable
+                                onPress={pickImage}
+                                className="bg-purple-50 dark:bg-purple-900/20 border-2 border-dashed border-purple-300 dark:border-purple-700 rounded-xl p-4 items-center justify-center active:opacity-70"
+                            >
+                                {selectedImage ? (
+                                    <View className="items-center">
+                                        <Image
+                                            source={{ uri: selectedImage }}
+                                            className="w-32 h-32 rounded-lg mb-2"
+                                            resizeMode="cover"
+                                        />
+                                        <ThemedText className="text-purple-600 dark:text-purple-400 text-sm font-semibold">
+                                            Toca para cambiar imagen
+                                        </ThemedText>
+                                    </View>
+                                ) : (
+                                    <View className="items-center py-4">
+                                        <Ionicons name="cloud-upload-outline" size={48} color="#9333ea" />
+                                        <ThemedText className="text-purple-600 dark:text-purple-400 font-semibold mt-2">
+                                            Seleccionar imagen
+                                        </ThemedText>
+                                        <ThemedText className="text-purple-500 dark:text-purple-500 text-xs mt-1">
+                                            Toca para elegir desde tu galería
+                                        </ThemedText>
+                                    </View>
+                                )}
+                            </Pressable>
                         </View>
 
                         {/* Buttons */}
