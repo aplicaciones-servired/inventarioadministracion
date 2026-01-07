@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Image, Pressable } from "react-native";
-import ModalDetalle from "./ModalDetalle";
+import ModalDetalle from "./Modalproducto/ModalDetalle";
+import { ThemedText } from "./themecontex/themed-text";
 
 type Props = {
   title: string;
@@ -45,19 +46,19 @@ export default function InventoryCard({
 
         {/* Info */}
         <View className="flex-1 ml-3">
-          <Text className="text-base font-semibold text-gray-900">
+          <ThemedText className="text-base font-semibold text-gray-900">
             {title}
-          </Text>
+          </ThemedText>
 
-          <Text className="text-xs text-gray-500 mt-0.5">
+          <ThemedText className="text-xs text-gray-500 mt-0.5">
             {stock} in Stock
-          </Text>
+          </ThemedText>
         </View>
 
         {/* Precio */}
-        <Text className="text-base font-semibold text-gray-900">
+        <ThemedText className="text-base font-semibold text-gray-900">
           {price}
-        </Text>
+        </ThemedText>
       </Pressable>
       <ModalDetalle
         isOpen={isModalOpen}

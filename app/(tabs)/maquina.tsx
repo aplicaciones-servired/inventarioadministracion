@@ -4,12 +4,12 @@ import { Pressable, TextInput } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import InventoryCard from "@/components/card";
 import Feather from '@expo/vector-icons/Feather';
 import ThemedView from "@/components/themecontex/ThemedView";
 import ModalInven from "@/components/Modalproducto/ModalInven";
+import CardMaquina from "@/components/CardMaquina";
 
-export default function Inventario() {
+export default function Maquina() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <SafeAreaProvider className="flex-1 bg-white dark:bg-black ">
@@ -25,17 +25,7 @@ export default function Inventario() {
             />
           </ThemedView>
           <ThemedView className="mt-4 mb-2">
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
+            <CardMaquina fecha={new Date()} v_productos={147000} v_raspas={317000} total={317000} ultimo_contados={8329000} calor_contador_fecha={8629000} raspas_vendidos={85} raspa_maquina={100} raspas_stock={217} compras={0} observaciones="Queda un sobrante por valor de $17.000=" />
             </ThemedView>
         </SafeAreaView>
       </ScrollView>

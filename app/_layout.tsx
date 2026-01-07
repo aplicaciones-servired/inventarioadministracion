@@ -18,7 +18,7 @@ export default function RootLayout() {
     <AuthProvider>
       <ThemeProvider value={currentTheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: 'fade' }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: 'fade'}} />
           <Stack.Screen name="modal" />
           <Stack.Screen
             name="index"
@@ -31,6 +31,13 @@ export default function RootLayout() {
             name="inventario"
             options={{
               title: 'Inventario',
+              headerShown: true,
+            }}
+          />
+          <Stack.Screen
+            name="maquina"
+            options={{
+              title: 'Máquina',
               headerShown: true,
             }}
           />

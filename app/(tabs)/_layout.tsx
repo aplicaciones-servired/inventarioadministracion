@@ -3,7 +3,7 @@ import { useAuth } from '@/auth/AuthProvider';
 
 import { Colors } from '@/constants/theme';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { DrawerContentComponentProps, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
+import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { Drawer } from 'expo-router/drawer';
 import React, { useEffect, useState } from 'react';
 import { useColorScheme, View } from 'react-native';
@@ -11,18 +11,18 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { colorScheme } from "nativewind";
 import { ThemedText } from "@/components/themecontex/themed-text";
 import ThemedView from "@/components/themecontex/ThemedView";
-import { DrawerContentScrollView } from '@react-navigation/drawer';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { logout } = useAuth();
   const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
-  
+
   useEffect(() => {
     const scheme = colorScheme.get();
     setCurrentTheme(scheme === "dark" ? "dark" : "light");
   }, []);
-  
+
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
       {/* Header del Drawer */}
@@ -44,16 +44,16 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
       <View className="flex-1 py-4">
         <DrawerItemList {...props} />
       </View>
-      
+
       {/* Botón de cerrar sesión */}
       <View className="border-t border-neutral-200 dark:border-neutral-700 p-4">
         <DrawerItem
           label="Cerrar Sesión"
-          labelStyle={{ 
+          labelStyle={{
             fontSize: 15,
             fontWeight: '600',
           }}
-          style={{ 
+          style={{
             backgroundColor: currentTheme === 'dark' ? '#ef4444' : '#fee2e2',
             borderRadius: 8,
             marginHorizontal: 0,
@@ -104,12 +104,12 @@ export default function RootLayout() {
           />
 
           <Drawer.Screen
-            name="explore"
+            name="maquina"
             options={{
-              drawerLabel: 'Cronograma',
-              title: 'Cronograma',
+              drawerLabel: 'Máquina',
+              title: 'Máquina',
               drawerIcon: ({ color, size }) => (
-                <MaterialIcons name="calendar-today" size={size} color={color} />
+                <MaterialCommunityIcons name="slot-machine" size={size} color={color} />
               ),
             }}
           />
