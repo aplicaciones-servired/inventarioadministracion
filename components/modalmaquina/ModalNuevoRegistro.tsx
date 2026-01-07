@@ -4,6 +4,7 @@ import { ThemedText } from "../themecontex/themed-text";
 import ThemeInput from "../themecontex/ThemeInput";
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { formatearNumero } from "../ui/Format";
 
 interface ModalNuevoRegistroProps {
     isOpen: boolean;
@@ -14,7 +15,16 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [ventaProductos, setVentaProductos] = useState<string>('');
     const [ventaRaspas, setVentaRaspas] = useState<string>('');
-    
+    const [totalVentas, setTotalVentas] = useState<number>(0);
+    const [ultimoContado, setUltimoContado] = useState<string>('');
+    const [contadorFecha, setContadorFecha] = useState<string>('');
+    const [raspasVendidos, setRaspasVendidos] = useState<string>('');
+    const [raspasMaquina, setRaspasMaquina] = useState<string>('');
+    const [raspasStock, setRaspasStock] = useState<string>('');
+    const [compras, setCompras] = useState<string>('');
+    const [observaciones, setObservaciones] = useState<string>('');
+
+
     // Limpiar imagen y campos cuando se cierra el modal
     useEffect(() => {
         if (!isOpen) {
@@ -23,17 +33,18 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
             setVentaRaspas('');
         }
     }, [isOpen]);
-    
-    // Calcular total automáticamente
-    const calcularTotal = () => {
-        const productos = parseFloat(ventaProductos) || 0;
-        const raspas = parseFloat(ventaRaspas) || 0;
-        return productos + raspas;
-    };
+
+
+    useEffect(() => {
+        const productos = parseInt(ventaProductos.replace(/[^0-9]/g, '')) || 0;
+        const raspas = parseInt(ventaRaspas.replace(/[^0-9]/g, '')) || 0;
+        setTotalVentas(productos + raspas);
+    }, [ventaProductos, ventaRaspas]);
+
 
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        
+
         if (status !== 'granted') {
             Alert.alert('Permisos denegados', 'Necesitamos permisos para acceder a tus fotos');
             return;
@@ -51,7 +62,7 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
 
     const takePhoto = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
-        
+
         if (status !== 'granted') {
             Alert.alert('Permisos denegados', 'Necesitamos permisos para usar la cámara');
             return;
@@ -125,7 +136,7 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                 placeholder="$0"
                                 className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
                                 keyboardType="numeric"
-                                value={ventaProductos}
+                                value={formatearNumero(ventaProductos)}
                                 onChangeText={setVentaProductos}
                             />
                         </View>
@@ -142,7 +153,7 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                 placeholder="$0"
                                 className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
                                 keyboardType="numeric"
-                                value={ventaRaspas}
+                                value={formatearNumero(ventaRaspas)}
                                 onChangeText={setVentaRaspas}
                             />
                         </View>
@@ -157,7 +168,7 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                     </ThemedText>
                                 </View>
                                 <ThemedText className="text-3xl font-bold text-cyan-700 dark:text-cyan-300">
-                                    ${calcularTotal().toLocaleString('es-ES', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                                    ${totalVentas.toLocaleString('es-ES', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                                 </ThemedText>
                             </View>
                         </View>
@@ -176,6 +187,8 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                     placeholder="0"
                                     className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
                                     keyboardType="numeric"
+                                    value={formatearNumero(ultimoContado)}
+                                    onChangeText={setUltimoContado}
                                 />
                             </View>
 
@@ -191,6 +204,8 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                     placeholder="0"
                                     className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
                                     keyboardType="numeric"
+                                    value={formatearNumero(contadorFecha)}
+                                    onChangeText={setContadorFecha}
                                 />
                             </View>
                         </View>
@@ -212,6 +227,8 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                         placeholder="0"
                                         className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
                                         keyboardType="numeric"
+                                        value={formatearNumero(raspasVendidos)}
+                                        onChangeText={setRaspasVendidos}
                                     />
                                 </View>
                                 <View className="flex-1">
@@ -225,6 +242,8 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                         placeholder="0"
                                         className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
                                         keyboardType="numeric"
+                                        value={raspasMaquina}
+                                        onChangeText={setRaspasMaquina}
                                     />
                                 </View>
                                 <View className="flex-1">
@@ -238,6 +257,8 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                         placeholder="0"
                                         className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
                                         keyboardType="numeric"
+                                        value={raspasStock}
+                                        onChangeText={setRaspasStock}
                                     />
                                 </View>
                             </View>
@@ -255,6 +276,8 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                 placeholder="$0"
                                 className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
                                 keyboardType="numeric"
+                                value={formatearNumero(compras)}
+                                onChangeText={setCompras}
                             />
                         </View>
 
@@ -271,6 +294,8 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                 className="w-full h-24 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-3 bg-gray-50 dark:bg-gray-800"
                                 multiline
                                 textAlignVertical="top"
+                                value={observaciones}
+                                onChangeText={setObservaciones}
                             />
                         </View>
 
@@ -282,7 +307,7 @@ const ModalNuevoRegistro = ({ isOpen, onClose }: ModalNuevoRegistroProps) => {
                                     Foto de Evidencia (Opcional)
                                 </ThemedText>
                             </View>
-                            
+
                             <Pressable
                                 onPress={showImageOptions}
                                 className="bg-purple-50 dark:bg-purple-900/20 border-2 border-dashed border-purple-300 dark:border-purple-700 rounded-xl p-4 items-center justify-center active:opacity-70"
