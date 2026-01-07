@@ -15,6 +15,7 @@ type Props = {
   raspas_stock: number;
   compras: number;
   observaciones: string;
+  foto?: string;
 };
 
 export default function CardMaquina({
@@ -29,6 +30,7 @@ export default function CardMaquina({
   raspas_stock,
   compras,
   observaciones,
+  foto,
 }: Props) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,6 +128,7 @@ export default function CardMaquina({
         raspas_stock={raspas_stock}
         compras={compras}
         observaciones={observaciones}
+        foto={foto}
       />
     </>
   );

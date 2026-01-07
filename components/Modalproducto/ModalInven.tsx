@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Modal, Pressable, ScrollView, Image, Alert } from "react-native";
 import { ThemedText } from "../themecontex/themed-text";
 import ThemeInput from "../themecontex/ThemeInput";
@@ -15,6 +15,13 @@ interface ModalInvenProps {
 const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+    // Limpiar imagen cuando se cierra el modal
+    useEffect(() => {
+        if (!isOpen) {
+            setSelectedImage(null);
+        }
+    }, [isOpen]);
+
     const pickImage = async () => {
         // Solicitar permisos
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -27,14 +34,50 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
         // Abrir selector de imágenes
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
             quality: 0.8,
         });
 
         if (!result.canceled && result.assets[0]) {
             setSelectedImage(result.assets[0].uri);
         }
+    };
+
+    const takePhoto = async () => {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        
+        if (status !== 'granted') {
+            Alert.alert('Permisos denegados', 'Necesitamos permisos para usar la cámara');
+            return;
+        }
+
+        const result = await ImagePicker.launchCameraAsync({
+            quality: 0.8,
+        });
+
+        if (!result.canceled && result.assets[0]) {
+            setSelectedImage(result.assets[0].uri);
+        }
+    };
+
+    const showImageOptions = () => {
+        Alert.alert(
+            'Seleccionar imagen',
+            '¿Cómo deseas agregar la imagen?',
+            [
+                {
+                    text: 'Tomar foto',
+                    onPress: takePhoto,
+                },
+                {
+                    text: 'Elegir de galería',
+                    onPress: pickImage,
+                },
+                {
+                    text: 'Cancelar',
+                    style: 'cancel',
+                },
+            ]
+        );
     };
 
     return (
@@ -117,7 +160,7 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
                             </View>
                             
                             <Pressable
-                                onPress={pickImage}
+                                onPress={showImageOptions}
                                 className="bg-purple-50 dark:bg-purple-900/20 border-2 border-dashed border-purple-300 dark:border-purple-700 rounded-xl p-4 items-center justify-center active:opacity-70"
                             >
                                 {selectedImage ? (
@@ -133,12 +176,12 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
                                     </View>
                                 ) : (
                                     <View className="items-center py-4">
-                                        <Ionicons name="cloud-upload-outline" size={48} color="#9333ea" />
+                                        <Ionicons name="camera-outline" size={48} color="#9333ea" />
                                         <ThemedText className="text-purple-600 dark:text-purple-400 font-semibold mt-2">
-                                            Seleccionar imagen
+                                            Agregar imagen
                                         </ThemedText>
                                         <ThemedText className="text-purple-500 dark:text-purple-500 text-xs mt-1">
-                                            Toca para elegir desde tu galería
+                                            Toca para tomar foto o elegir de galería
                                         </ThemedText>
                                     </View>
                                 )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Modal, Pressable, ScrollView } from "react-native";
+import { View, Modal, Pressable, ScrollView, Image } from "react-native";
 import { ThemedText } from "../themecontex/themed-text";
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -17,6 +17,7 @@ type Props = {
     raspas_stock: number;
     compras: number;
     observaciones: string;
+    foto?: string;
 };
 
 export default function ModalMaquina({
@@ -33,6 +34,7 @@ export default function ModalMaquina({
     raspas_stock,
     compras,
     observaciones,
+    foto,
 }: Props) {
     return (
         <Modal
@@ -204,6 +206,25 @@ export default function ModalMaquina({
                                     <ThemedText className="text-base text-amber-900 dark:text-amber-200">
                                         {observaciones}
                                     </ThemedText>
+                                </View>
+                            </View>
+                        )}
+
+                        {/* Foto de Evidencia */}
+                        {foto && (
+                            <View className="mb-4">
+                                <View className="flex-row items-center gap-2 mb-3">
+                                    <Ionicons name="camera" size={16} color="#9333ea" />
+                                    <ThemedText className="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-white">
+                                        Foto de Evidencia
+                                    </ThemedText>
+                                </View>
+                                <View className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg border border-purple-300 dark:border-purple-700">
+                                    <Image
+                                        source={{ uri: foto }}
+                                        className="w-full h-64 rounded-lg"
+                                        resizeMode="cover"
+                                    />
                                 </View>
                             </View>
                         )}

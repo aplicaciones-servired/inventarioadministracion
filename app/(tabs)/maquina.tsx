@@ -6,7 +6,7 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from '@expo/vector-icons/Feather';
 import ThemedView from "@/components/themecontex/ThemedView";
-import ModalInven from "@/components/Modalproducto/ModalInven";
+import ModalNuevoRegistro from "@/components/modalmaquina/ModalNuevoRegistro";
 import CardMaquina from "@/components/CardMaquina";
 
 export default function Maquina() {
@@ -36,7 +36,7 @@ export default function Maquina() {
       >
         <AntDesign name="plus" size={40} color="white" />
       </Pressable>
-      <ModalInven
+      <ModalNuevoRegistro
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
