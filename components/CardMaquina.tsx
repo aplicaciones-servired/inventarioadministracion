@@ -55,16 +55,11 @@ export default function CardMaquina({
                 Máquina Dispensadora
               </ThemedText>
               <ThemedText type="defaultSemiBold" className="text-cyan-600 dark:text-cyan-400">
-                {fecha.toLocaleDateString('es-ES', { 
-                  day: 'numeric', 
-                  month: 'short', 
-                  year: 'numeric' 
+                {fecha.toLocaleDateString('es-ES', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric'
                 })}
-              </ThemedText>
-            </View>
-            <View className="bg-cyan-100 dark:bg-cyan-900/30 px-3 py-1.5 rounded-full">
-              <ThemedText className="text-cyan-700 dark:text-cyan-300 font-bold text-lg">
-                ${total.toLocaleString()}
               </ThemedText>
             </View>
           </View>
@@ -76,7 +71,7 @@ export default function CardMaquina({
                 Productos
               </ThemedText>
               <ThemedText className="text-lg font-bold text-green-700 dark:text-green-300">
-                {v_productos}
+                {v_productos.toLocaleString()}
               </ThemedText>
             </View>
             <View className="bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg flex-1">
@@ -84,19 +79,28 @@ export default function CardMaquina({
                 Raspas
               </ThemedText>
               <ThemedText className="text-lg font-bold text-blue-700 dark:text-blue-300">
-                {v_raspas}
+                {v_raspas.toLocaleString()}
               </ThemedText>
             </View>
+
+          </View>
+          <View className="bg-red-50 dark:bg-red-900/20 px-4 py-3 rounded-lg min-w-[45%]">
+            <ThemedText className="text-xs text-red-600 dark:text-red-400 mb-1">
+              Total
+            </ThemedText>
+            <ThemedText className="text-2xl font-bold text-red-700 dark:text-red-300">
+              ${total.toLocaleString()}
+            </ThemedText>
           </View>
 
           {/* Contador */}
-          <View className="bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
+          <View className="bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg ">
             <View className="flex-row justify-between items-center">
               <ThemedText className="text-xs text-gray-600 dark:text-gray-400">
                 Contador Fecha
               </ThemedText>
               <ThemedText className="text-sm font-bold">
-                {calor_contador_fecha}
+                {calor_contador_fecha.toLocaleString()}
               </ThemedText>
             </View>
           </View>

@@ -25,7 +25,7 @@ export default function Maquina() {
             />
           </ThemedView>
           <ThemedView className="mt-4 mb-2">
-            <CardMaquina fecha={new Date()} v_productos={147000} v_raspas={317000} total={317000} ultimo_contados={8329000} calor_contador_fecha={8629000} raspas_vendidos={85} raspa_maquina={100} raspas_stock={217} compras={0} observaciones="Queda un sobrante por valor de $17.000=" />
+            <CardMaquina fecha={new Date()} v_productos={147000} v_raspas={170000} total={317000} ultimo_contados={8329000} calor_contador_fecha={8629000} raspas_vendidos={85} raspa_maquina={100} raspas_stock={217} compras={0} observaciones="Queda un sobrante por valor de $17.000=" />
             </ThemedView>
         </SafeAreaView>
       </ScrollView>
