@@ -1,52 +1,21 @@
 ﻿import { Button } from "@/components/nativewindui/Button";
 import { Text } from "@/components/nativewindui/Text";
-import { Toast } from "@/components/nativewindui/Toast";
 import ThemedView from "@/components/themecontex/ThemedView";
 import ThemeInput from "@/components/themecontex/ThemeInput";
 import UseLogin from "@/services/UseLogin";
 import { useState } from "react";
-import { View, ActivityIndicator, Pressable } from "react-native";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { View,} from "react-native";
 import "../global.css";
 
 
 export default function Login() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [toast, setToast] = useState({ visible: false, message: '', type: 'info' as 'success' | 'error' | 'info' });
 
-    const { loading, handleLogin, error } = UseLogin({
+    const { loading, handleLogin } = UseLogin({
         Usuario: username,
         Contraseña: password,
     });
-
-    const showToast = (message: string, type: 'success' | 'error' | 'info') => {
-        setToast({ visible: true, message, type });
-    };
-
-    const hideToast = () => {
-        setToast({ ...toast, visible: false });
-    };
-
-    const onLoginPress = async () => {
-        if (!username || !password) {
-            showToast("Por favor complete todos los campos", "error");
-            return;
-        }
-
-        showToast("Iniciando sesión...", "info");
-
-        try {
-            await handleLogin();
-            if (error) {
-                showToast(error, "error");
-            } else {
-                showToast("Inicio de sesión exitoso", "success");
-            }
-        } catch (err) {
-            showToast("Ocurrió un error inesperado", "error");
-        }
-    };
 
     return (
         <ThemedView className="flex-1 items-center justify-center h-full w-full bg-white dark:bg-black">
@@ -81,7 +50,7 @@ export default function Login() {
                 </ThemeInput>
 
                 <Button
-                    onPress={onLoginPress}
+                    onPress={handleLogin}
                     className="mt-6 w-full"
                     disabled={loading}
                 >
@@ -91,12 +60,6 @@ export default function Login() {
                 </Button>
 
             </View>
-            <Toast
-                message={toast.message}
-                type={toast.type}
-                visible={toast.visible}
-                onHide={hideToast}
-            />
         </ThemedView>
     );
 }

@@ -25,17 +25,17 @@ export default function Inventario() {
             />
           </ThemedView>
           <ThemedView className="mt-4 mb-2">
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
-            <InventoryCard title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} />
+            <InventoryCard id="1" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="11/01/2026" />
+            {/* <InventoryCard id="2" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="3" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="4" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="5" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="6" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="7" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="8" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="9" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="10" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" />
+            <InventoryCard id="11" title="Sample Item" stock={10} price="$99.99" image={require('@/assets/images/react-logo.png')} FechaDeVencimiento="15/01/2026" /> */}
             </ThemedView>
         </SafeAreaView>
       </ScrollView>

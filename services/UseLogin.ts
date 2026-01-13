@@ -26,16 +26,17 @@ export default function UseLogin({
   const handleLogin = async () => {
     if (!Usuario || !Contraseña) {
       Alertas("Por favor complete todos los campos");
-      onLog && onLog("Campos vacíos");
+      //onLog && onLog("Campos vacíos");
       return;
     }
 
     if (!apiUrl) {
-      setError("URL de inicio de sesión no configurada. Contacte a soporte.");
-      onLog && onLog("URL no configurada");
+      Alertas("URL de inicio de sesión no configurada. Contacte a soporte.");
+      //setError("URL de inicio de sesión no configurada. Contacte a soporte.");
+      //onLog && onLog("URL no configurada");
       return;
     }
-    onLog && onLog("url: " + apiUrl);
+    //onLog && onLog("url: " + apiUrl);
     setLoading(true);
     try {
       const res = await axios.post<LoginResponse>(
@@ -56,7 +57,7 @@ export default function UseLogin({
       const perfilRaw = res.data?.perfil?.trim()?.toUpperCase();
       const Usuarios = Usuario;
 
-      onLog && onLog("Respuesta del login: " + JSON.stringify(res.data));
+      //onLog && onLog("Respuesta del login: " + JSON.stringify(res.data));
 
       if (
         res.status === 200 &&
@@ -65,20 +66,24 @@ export default function UseLogin({
           perfilRaw === "APLICACIONES")
       ) {
         await login(perfilRaw, Usuarios);
-        onLog && onLog("Login exitoso, perfil: " + perfilRaw);
+        // onLog && onLog("Login exitoso ");
+        Alertas("Login exitoso");
       } else {
-        setError("Perfil no autorizado");
-        onLog && onLog("Perfil no autorizado: " + perfilRaw);
+        //setError("Perfil no autorizado");
+        Alertas("Perfil no autorizado");
+        // onLog && onLog("Perfil no autorizado: " + perfilRaw);
       }
     } catch (err: any) {
       console.error("Error en login:", err);
       if (err.response?.data?.error) {
-        setError(err.response.data.error);
+        //setError(err.response.data.error);
+        Alertas(err.response.data.error);
       } else if (err.message) {
-        setError(err.message);
+        Alertas(err.message);
+        //setError(err.message);
       }
-      onLog &&
-        onLog("Error en login: " + (err?.message || JSON.stringify(err)));
+      //onLog &&
+        //onLog("Error en login: " + (err?.message || JSON.stringify(err)));
     } finally {
       setLoading(false);
     }

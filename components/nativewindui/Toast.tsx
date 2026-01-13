@@ -11,7 +11,7 @@ export type ToastProps = {
   duration?: number;
 };
 
-export function Toast({ message, type, visible, onHide, duration = 6000 }: ToastProps) {
+export function Toast({ message, type, visible, onHide, duration = 10000 }: ToastProps) {
   const opacity = React.useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
