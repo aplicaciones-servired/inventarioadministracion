@@ -104,6 +104,17 @@ export default function RootLayout() {
           />
 
           <Drawer.Screen
+            name="productos"
+            options={{
+              drawerLabel: 'Productos',
+              title: 'Productos',
+              drawerIcon: ({ color, size }) => (
+                <MaterialIcons name="shopping-cart" size={size} color={color} />
+              ),
+            }}
+          />
+
+          <Drawer.Screen
             name="maquina"
             options={{
               drawerLabel: 'Máquina',

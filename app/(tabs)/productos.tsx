@@ -6,49 +6,48 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from '@expo/vector-icons/Feather';
 import ThemedView from "@/components/themecontex/ThemedView";
-import ModalNuevoRegistro from "@/components/modalmaquina/ModalNuevoRegistro";
-import CardMaquina from "@/components/CardMaquina";
-import { MaquinasService, MaquinaConImagen } from "@/services/MaquinasService";
+import CardProducto from "@/components/CardProducto";
+import { ProductosService, ProductoConImagen } from "@/services/ProductosService";
 import { ThemedText } from "@/components/themecontex/themed-text";
+import ModalProducto from "@/components/Modalproducto/ModalProducto";
 
-export default function Maquina() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [maquinas, setMaquinas] = useState<MaquinaConImagen[]>([]);
+export default function Productos() {
+  const [productos, setProductos] = useState<ProductoConImagen[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredMaquinas, setFilteredMaquinas] = useState<MaquinaConImagen[]>([]);
+  const [filteredProductos, setFilteredProductos] = useState<ProductoConImagen[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const cargarMaquinas = useCallback(async () => {
+  const cargarProductos = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await MaquinasService.getMaquinas('');
-      setMaquinas(data);
-      setFilteredMaquinas(data);
+      const data = await ProductosService.getProductos('', true);
+      setProductos(data);
+      setFilteredProductos(data);
     } catch (error) {
-      console.error('Error al cargar máquinas:', error);
+      console.error('Error al cargar productos:', error);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // Cargar máquinas al montar
+  // Cargar productos al montar
   useEffect(() => {
-    cargarMaquinas();
-  }, [cargarMaquinas]);
+    cargarProductos();
+  }, [cargarProductos]);
 
-  // Filtrar máquinas al buscar
+  // Filtrar productos al buscar
   useEffect(() => {
     if (searchQuery.trim() === '') {
-      setFilteredMaquinas(maquinas);
+      setFilteredProductos(productos);
     } else {
-      const filtered = maquinas.filter(m => 
-        m.NOMBRE.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        m.CODIGO.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (m.UBICACION && m.UBICACION.toLowerCase().includes(searchQuery.toLowerCase()))
+      const filtered = productos.filter(p => 
+        p.NOMBRE.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.CODIGO.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setFilteredMaquinas(filtered);
+      setFilteredProductos(filtered);
     }
-  }, [searchQuery, maquinas]);
+  }, [searchQuery, productos]);
 
   return (
     <SafeAreaProvider className="flex-1 bg-white dark:bg-black ">
@@ -58,7 +57,7 @@ export default function Maquina() {
           <ThemedView className="flex-row mt-5 items-center bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-3 border border-gray-300 dark:border-gray-700">
             <Feather name="search" size={24} color="#6b7280" />
             <TextInput
-              placeholder="Buscar máquinas..."
+              placeholder="Buscar productos..."
               className="flex-1 ml-2 text-base outline-none text-gray-900 dark:text-white"
               placeholderTextColor="#9ca3af"
               value={searchQuery}
@@ -70,27 +69,24 @@ export default function Maquina() {
             {loading ? (
               <ThemedView className="items-center justify-center py-10">
                 <ActivityIndicator size="large" color="#0891b2" />
-                <ThemedText className="mt-4 text-gray-500">Cargando máquinas...</ThemedText>
+                <ThemedText className="mt-4 text-gray-500">Cargando productos...</ThemedText>
               </ThemedView>
-            ) : filteredMaquinas.length === 0 ? (
+            ) : filteredProductos.length === 0 ? (
               <ThemedView className="items-center justify-center py-10">
                 <ThemedText className="text-gray-500">
-                  {searchQuery ? 'No se encontraron máquinas' : 'No hay máquinas registradas'}
+                  {searchQuery ? 'No se encontraron productos' : 'No hay productos registrados'}
                 </ThemedText>
               </ThemedView>
             ) : (
-              filteredMaquinas.map((maquina) => (
-                <CardMaquina
-                  key={maquina.ID_MAQUINA}
-                  id={maquina.ID_MAQUINA}
-                  codigo={maquina.CODIGO}
-                  nombre={maquina.NOMBRE}
-                  estado={maquina.ESTADO}
-                  fechaCompra={maquina.FECHA_COMPRA}
-                  fechaInicioOperacion={maquina.FECHA_INICIO_OPERACION}
-                  ubicacion={maquina.UBICACION || undefined}
-                  observaciones={maquina.OBSERVACIONES || undefined}
-                  imageUrl={maquina.imagenUrl}
+              filteredProductos.map((producto) => (
+                <CardProducto
+                  key={producto.ID_PRODUCTO}
+                  id={producto.ID_PRODUCTO}
+                  codigo={producto.CODIGO}
+                  nombre={producto.NOMBRE}
+                  tipoProducto={producto.TIPO_PRODUCTO}
+                  estado={producto.ESTADO}
+                  imageUrl={producto.imagenUrl}
                 />
               ))
             )}
@@ -103,11 +99,12 @@ export default function Maquina() {
       >
         <AntDesign name="plus" size={40} color="white" />
       </Pressable>
-      <ModalNuevoRegistro
+
+      <ModalProducto
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          cargarMaquinas(); // Recargar al cerrar modal
+          cargarProductos(); // Recargar lista después de crear
         }}
       />
     </SafeAreaProvider>

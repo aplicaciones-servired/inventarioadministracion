@@ -6,26 +6,20 @@ import { ImagenesService } from "../services/ImagenesService";
 
 type Props = {
   id: number;
-  idProducto: number;
-  nombreProducto: string;
-  codigoProducto: string;
+  codigo: string;
+  nombre: string;
   tipoProducto: 'ALIMENTO' | 'TANGIBLE';
-  cantidadActual: number;
-  idLote: number;
-  idUbicacion: number;
+  estado: boolean;
   imageUrl?: string;
   onPress?: () => void;
 };
 
-export default function InventoryCard({
+export default function CardProducto({
   id,
-  idProducto,
-  nombreProducto,
-  codigoProducto,
+  codigo,
+  nombre,
   tipoProducto,
-  cantidadActual,
-  idLote,
-  idUbicacion,
+  estado,
   imageUrl,
   onPress
 }: Props) {
@@ -41,7 +35,7 @@ export default function InventoryCard({
           const imagenes = await ImagenesService.getImagenes(
             'INVENTARIO',
             id,
-            '' // Sin token por ahora
+            ''
           );
           if (imagenes.length > 0) {
             setImagenUrl(imagenes[0].url);
@@ -66,17 +60,12 @@ export default function InventoryCard({
     return tipoProducto === 'ALIMENTO' ? '#f59e0b' : '#3b82f6';
   };
 
-  const getStockColor = () => {
-    if (cantidadActual === 0) return 'text-red-600 dark:text-red-400';
-    if (cantidadActual < 10) return 'text-amber-600 dark:text-amber-400';
-    return 'text-green-600 dark:text-green-400';
-  };
-
   return (
     <Pressable
       className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-3 shadow-lg border border-gray-100 dark:border-gray-700 active:opacity-90"
       style={{ elevation: 4 }}
       onPress={onPress}
+      disabled={!estado}
     >
       <View className="flex-row items-center">
         {/* Imagen */}
@@ -98,29 +87,33 @@ export default function InventoryCard({
         {/* Info */}
         <View className="flex-1 ml-4">
           <ThemedText className="text-sm font-bold text-cyan-700 dark:text-cyan-300">
-            {nombreProducto}
+            {nombre}
           </ThemedText>
 
           <View className="flex-row items-center gap-1 mb-2">
             <Ionicons name="barcode-outline" size={14} color="#6366f1" />
             <ThemedText className="text-sm text-indigo-600 dark:text-indigo-400 font-semibold">
-              {codigoProducto}
+              {codigo}
             </ThemedText>
           </View>
 
-          <View className="flex-row items-center gap-1 mb-2">
-            <Ionicons name="cube-outline" size={14} color={cantidadActual === 0 ? '#dc2626' : cantidadActual < 10 ? '#f59e0b' : '#16a34a'} />
-            <ThemedText className={`text-sm font-semibold ${getStockColor()}`}>
-              Stock: {cantidadActual}
-            </ThemedText>
-          </View>
+          <View className="flex-row items-center gap-2">
+            {/* Tipo Badge */}
+            <View className={`${tipoProducto === 'ALIMENTO' ? 'bg-amber-100 dark:bg-amber-900/30' : 'bg-blue-100 dark:bg-blue-900/30'} px-2 py-1 rounded-lg flex-row items-center gap-1`}>
+              <Ionicons name={getIconoTipo()} size={14} color={getColorTipo()} />
+              <ThemedText className={`text-xs font-bold ${tipoProducto === 'ALIMENTO' ? 'text-amber-700 dark:text-amber-300' : 'text-blue-700 dark:text-blue-300'}`}>
+                {tipoProducto}
+              </ThemedText>
+            </View>
 
-          {/* Tipo Badge */}
-          <View className={`${tipoProducto === 'ALIMENTO' ? 'bg-amber-100 dark:bg-amber-900/30' : 'bg-blue-100 dark:bg-blue-900/30'} px-2 py-1 rounded-lg self-start flex-row items-center gap-1`}>
-            <Ionicons name={getIconoTipo()} size={12} color={getColorTipo()} />
-            <ThemedText className={`text-xs font-bold ${tipoProducto === 'ALIMENTO' ? 'text-amber-700 dark:text-amber-300' : 'text-blue-700 dark:text-blue-300'}`}>
-              {tipoProducto}
-            </ThemedText>
+            {/* Estado Badge */}
+            {!estado && (
+              <View className="bg-red-100 dark:bg-red-900/30 px-2 py-1 rounded-lg">
+                <ThemedText className="text-xs font-bold text-red-700 dark:text-red-300">
+                  INACTIVO
+                </ThemedText>
+              </View>
+            )}
           </View>
         </View>
 

@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { View, Modal, Pressable, ScrollView, Image, Alert, ActivityIndicator } from "react-native";
+import { View, Modal, Pressable, ScrollView, Image, Alert, ActivityIndicator, Switch } from "react-native";
 import { ThemedText } from "../themecontex/themed-text";
 import ThemeInput from "../themecontex/ThemeInput";
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { InventarioService } from "@/services/InventarioService";
+import { ProductosService } from "@/services/ProductosService";
 import { ImagenesService } from "@/services/ImagenesService";
 
-interface ModalInvenProps {
+interface ModalProductoProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
-    // Campos del modelo MD_INVENTARIO
-    const [idProducto, setIdProducto] = useState<string>('');
-    const [idLote, setIdLote] = useState<string>('');
-    const [idUbicacion, setIdUbicacion] = useState<string>('');
-    const [cantidadActual, setCantidadActual] = useState<string>('');
+const ModalProducto = ({ isOpen, onClose }: ModalProductoProps) => {
+    // Campos del modelo MD_PRODUCTOS
+    const [codigo, setCodigo] = useState<string>('');
+    const [nombre, setNombre] = useState<string>('');
+    const [tipoProducto, setTipoProducto] = useState<'ALIMENTO' | 'TANGIBLE'>('ALIMENTO');
+    const [manejaVencimiento, setManejaVencimiento] = useState<boolean>(false);
+    const [estado, setEstado] = useState<boolean>(true);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     // Limpiar campos cuando se cierra el modal
     useEffect(() => {
         if (!isOpen) {
-            setIdProducto('');
-            setIdLote('');
-            setIdUbicacion('');
-            setCantidadActual('');
+            setCodigo('');
+            setNombre('');
+            setTipoProducto('ALIMENTO');
+            setManejaVencimiento(false);
+            setEstado(true);
             setSelectedImage(null);
         }
     }, [isOpen]);
 
     const pickImage = async () => {
-        // Solicitar permisos
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (status !== 'granted') {
@@ -41,7 +42,6 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
             return;
         }
 
-        // Abrir selector de imágenes
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images'],
             quality: 0.8,
@@ -92,54 +92,49 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
 
     const handleGuardar = async () => {
         // Validaciones
-        if (!idProducto || !idLote || !idUbicacion || !cantidadActual) {
-            Alert.alert('Error', 'Todos los campos son obligatorios');
-            return;
-        }
-
-        const cantidad = parseInt(cantidadActual);
-        if (isNaN(cantidad) || cantidad < 0) {
-            Alert.alert('Error', 'La cantidad debe ser un número válido mayor o igual a 0');
+        if (!codigo || !nombre) {
+            Alert.alert('Error', 'El código y nombre son obligatorios');
             return;
         }
 
         setLoading(true);
         try {
-            // Crear inventario
-            const result = await InventarioService.crearInventario(
+            // Crear producto
+            const result = await ProductosService.crearProducto(
                 {
-                    idProducto: parseInt(idProducto),
-                    idLote: parseInt(idLote),
-                    idUbicacion: parseInt(idUbicacion),
-                    cantidadActual: cantidad
+                    codigo,
+                    nombre,
+                    tipoProducto,
+                    manejaVencimiento,
+                    estado
                 },
                 ''
             );
 
-            if (result.success && result.idInventario) {
+            if (result.success && result.idProducto) {
                 // Si hay imagen, subirla
                 if (selectedImage) {
                     try {
                         await ImagenesService.subirImagenDesdeUri(
                             selectedImage,
                             'INVENTARIO',
-                            result.idInventario,
+                            result.idProducto,
                             ''
                         );
                     } catch (error) {
                         console.error('Error al subir imagen:', error);
-                        Alert.alert('Advertencia', 'Inventario creado pero hubo un error al subir la imagen');
+                        Alert.alert('Advertencia', 'Producto creado pero hubo un error al subir la imagen');
                     }
                 }
 
-                Alert.alert('Éxito', 'Inventario registrado correctamente');
+                Alert.alert('Éxito', 'Producto registrado correctamente');
                 onClose();
             } else {
-                Alert.alert('Error', result.error || 'Error al crear inventario');
+                Alert.alert('Error', result.error || 'Error al crear producto');
             }
         } catch (error: any) {
             console.error('Error:', error);
-            Alert.alert('Error', error.message || 'Error al guardar inventario');
+            Alert.alert('Error', error.message || 'Error al guardar producto');
         } finally {
             setLoading(false);
         }
@@ -160,7 +155,7 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
                             <View className="flex-row items-center gap-2 flex-1">
                                 <Ionicons name="add-circle" size={24} color="#0891b2" />
                                 <ThemedText type="title" className="text-cyan-600 dark:text-cyan-400">
-                                    Nuevo Inventario
+                                    Nuevo Producto
                                 </ThemedText>
                             </View>
                             <Pressable
@@ -171,80 +166,113 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
                             </Pressable>
                         </View>
 
-                        {/* ID Producto */}
+                        {/* Código */}
                         <View className="mb-4">
                             <View className="flex-row items-center gap-2 mb-2">
-                                <Ionicons name="pricetag" size={18} color="#0891b2" />
+                                <Ionicons name="barcode" size={18} color="#0891b2" />
                                 <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                    ID Producto *
+                                    Código *
                                 </ThemedText>
                             </View>
                             <ThemeInput
-                                placeholder="Ej: 1"
+                                placeholder="Ej: PROD001"
                                 className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
-                                keyboardType="numeric"
-                                value={idProducto}
-                                onChangeText={setIdProducto}
+                                value={codigo}
+                                onChangeText={setCodigo}
                             />
                         </View>
 
-                        {/* ID Lote */}
+                        {/* Nombre */}
                         <View className="mb-4">
                             <View className="flex-row items-center gap-2 mb-2">
-                                <Ionicons name="barcode" size={18} color="#6366f1" />
+                                <Ionicons name="pricetag" size={18} color="#6366f1" />
                                 <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                    ID Lote *
+                                    Nombre *
                                 </ThemedText>
                             </View>
                             <ThemeInput
-                                placeholder="Ej: 1"
+                                placeholder="Ej: Coca-Cola 500ml"
                                 className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
-                                keyboardType="numeric"
-                                value={idLote}
-                                onChangeText={setIdLote}
+                                value={nombre}
+                                onChangeText={setNombre}
                             />
                         </View>
 
-                        {/* ID Ubicación */}
+                        {/* Tipo de Producto */}
                         <View className="mb-4">
                             <View className="flex-row items-center gap-2 mb-2">
-                                <Ionicons name="location" size={18} color="#8b5cf6" />
+                                <Ionicons name="albums" size={18} color="#16a34a" />
                                 <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                    ID Ubicación *
+                                    Tipo de Producto *
                                 </ThemedText>
                             </View>
-                            <ThemeInput
-                                placeholder="Ej: 1"
-                                className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
-                                keyboardType="numeric"
-                                value={idUbicacion}
-                                onChangeText={setIdUbicacion}
-                            />
+                            <View className="flex-row gap-2">
+                                {(['ALIMENTO', 'TANGIBLE'] as const).map((tipo) => (
+                                    <Pressable
+                                        key={tipo}
+                                        onPress={() => setTipoProducto(tipo)}
+                                        className={`flex-1 py-3 rounded-lg border-2 ${tipoProducto === tipo ? 'bg-cyan-100 dark:bg-cyan-900/30 border-cyan-600' : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600'}`}
+                                    >
+                                        <ThemedText className={`text-center font-semibold ${tipoProducto === tipo ? 'text-cyan-700 dark:text-cyan-300' : 'text-gray-600 dark:text-gray-400'}`}>
+                                            {tipo}
+                                        </ThemedText>
+                                    </Pressable>
+                                ))}
+                            </View>
                         </View>
 
-                        {/* Cantidad Actual */}
+                        {/* Maneja Vencimiento */}
                         <View className="mb-4">
-                            <View className="flex-row items-center gap-2 mb-2">
-                                <Ionicons name="cube" size={18} color="#16a34a" />
-                                <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                    Cantidad Actual *
-                                </ThemedText>
+                            <View className="flex-row items-center justify-between bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-300 dark:border-gray-600">
+                                <View className="flex-row items-center gap-2 flex-1">
+                                    <Ionicons name="calendar-sharp" size={18} color="#f59e0b" />
+                                    <View>
+                                        <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
+                                            Maneja Vencimiento
+                                        </ThemedText>
+                                        <ThemedText className="text-xs text-gray-500 dark:text-gray-400">
+                                            ¿El producto tiene fecha de vencimiento?
+                                        </ThemedText>
+                                    </View>
+                                </View>
+                                <Switch
+                                    value={manejaVencimiento}
+                                    onValueChange={setManejaVencimiento}
+                                    trackColor={{ false: '#d1d5db', true: '#0891b2' }}
+                                    thumbColor={manejaVencimiento ? '#ffffff' : '#f3f4f6'}
+                                />
                             </View>
-                            <ThemeInput
-                                placeholder="0"
-                                className="w-full h-12 border border-gray-300 dark:border-gray-600 rounded-lg px-3 bg-gray-50 dark:bg-gray-800"
-                                keyboardType="numeric"
-                                value={cantidadActual}
-                                onChangeText={setCantidadActual}
-                            />
                         </View>
 
-                        {/* Selector de Imagen */}
+                        {/* Estado */}
+                        <View className="mb-4">
+                            <View className="flex-row items-center justify-between bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-300 dark:border-gray-600">
+                                <View className="flex-row items-center gap-2 flex-1">
+                                    <Ionicons name="checkmark-circle" size={18} color="#16a34a" />
+                                    <View>
+                                        <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
+                                            Producto Activo
+                                        </ThemedText>
+                                        <ThemedText className="text-xs text-gray-500 dark:text-gray-400">
+                                            {estado ? 'Disponible para uso' : 'Desactivado'}
+                                        </ThemedText>
+                                    </View>
+                                </View>
+                                <Switch
+                                    value={estado}
+                                    onValueChange={setEstado}
+                                    trackColor={{ false: '#d1d5db', true: '#16a34a' }}
+                                    thumbColor={estado ? '#ffffff' : '#f3f4f6'}
+                                />
+                            </View>
+                        </View>
+
+                        {/* Foto del Producto */}
                         <View className="mb-6">
                             <View className="flex-row items-center gap-2 mb-2">
-                                <Ionicons name="image" size={18} color="#9333ea" />
+                                <Ionicons name="camera" size={18} color="#9333ea" />
                                 <ThemedText type="defaultSemiBold" className="text-gray-700 dark:text-gray-300">
-                                    Imagen del Producto
+                                    Foto del Producto (Opcional)
                                 </ThemedText>
                             </View>
 
@@ -309,4 +337,4 @@ const ModalInven = ({ isOpen, onClose }: ModalInvenProps) => {
     );
 };
 
-export default ModalInven;
+export default ModalProducto;
